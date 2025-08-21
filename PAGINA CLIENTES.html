@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISNE@COMPU - Venta y Mantenimiento</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:0;
+    background:#f9fafc;
+    color:#333;
+}
+header {
+    background:#0d6efd;
+    color:white;
+    padding:20px;
+    text-align:center;
+    position:relative;
+}
+header h1 {
+    margin:0;
+    font-size:48px;
+}
+header p {
+    margin:10px 0 0;
+    font-size:16px;
+    line-height:1.5;
+}
+.contacto {
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:14px;
+    background:rgba(0,0,0,0.2);
+    padding:5px 10px;
+    border-radius:6px;
+}
+.contacto a {
+    color:white;
+    text-decoration:none;
+}
+.contacto a:hover {
+    text-decoration:underline;
+}
+.container {
+    width:90%;
+    max-width:1100px;
+    margin:30px auto;
+}
+h2 {
+    text-align:center;
+    margin-bottom:20px;
+}
+.productos {
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+}
+.producto {
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    width:260px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+.producto:hover {
+    transform:scale(1.03);
+}
+.producto img {
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:10px;
+}
+.producto h3 {
+    margin:10px 0 5px 0;
+}
+.producto p {
+    font-size:14px;
+    color:#555;
+    min-height:40px;
+}
+.btn-comprar {
+    background:#198754;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:10px;
+    display:inline-block;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+.btn-comprar:hover {
+    background:#157347;
+}
+.info-pagos {
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    margin-top:40px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.info-pagos h2 {
+    text-align:center;
+    margin-bottom:25px;
+}
+.pagos-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+.pago-card {
+    background:#f1f3f5;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+.pago-card:hover {
+    transform:translateY(-5px);
+    background:#e9ecef;
+}
+.pago-card h3 {
+    margin:10px 0;
+    font-size:18px;
+}
+.pago-card p {
+    font-size:14px;
+    color:#555;
+}
+footer {
+    text-align:center;
+    padding:15px;
+    background:#343a40;
+    color:white;
+    margin-top:30px;
+}
+footer a {
+    color:white;
+    text-decoration:none;
+}
+footer a:hover {
+    text-decoration:underline;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>💻 CISNE@COMPU</h1>
+    <p>💻✨ ¡En CISNE@COMPU ahora es más fácil comprar tu laptop o equipo de computación! ✨💻</p>
+    <div class="contacto">
+        📞 <a href="https://wa.me/593967861326" target="_blank">096 786 1326</a> / 
+        <a href="https://wa.me/593969516062" target="_blank">096 951 6062</a>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- 🛒 Catálogo de productos primero -->
+    <h2>🛒 Nuestro Catálogo</h2>
+    <div class="productos" id="productos"></div>
+
+    <!-- 💳 Formas de pago debajo del catálogo -->
+    <div class="info-pagos">
+        <h2>💳 Formas de Pago</h2>
+        <div class="pagos-grid">
+            <div class="pago-card">
+                <h3>💳 Tarjetas</h3>
+                <p>Aceptamos todas las <strong>tarjetas de crédito y débito</strong></p>
+            </div>
+            <div class="pago-card">
+                <h3>⏳ Diferido</h3>
+                <p>Paga hasta en <strong>12 meses</strong></p>
+            </div>
+            <div class="pago-card">
+                <h3>💰 PayPal</h3>
+                <p>Compra segura con <a href="https://paypal.me/pago212397?locale.x=es_XC&country.x=EC" target="_blank">PayPal</a></p>
+            </div>
+            <div class="pago-card">
+                <h3>💵 Efectivo & Transferencia</h3>
+                <p>También aceptamos <strong>efectivo</strong> y <strong>transferencias bancarias</strong></p>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:20px;">📞 Contáctanos: 
+            <a href="https://wa.me/593967861326" target="_blank">096 786 1326</a> / 
+            <a href="https://wa.me/593969516062" target="_blank">096 951 6062</a>
+        </p>
+    </div>
+
+</div>
+
+<footer>
+    © 2025 CISNE@COMPU - Todos los derechos reservados <br>
+    📞 <a href="https://wa.me/593967861326" target="_blank">096 786 1326</a> / 
+    <a href="https://wa.me/593969516062" target="_blank">096 951 6062</a>
+</footer>
+
+<script>
+let productos = JSON.parse(localStorage.getItem('productos')) || [];
+const contenedor = document.getElementById('productos');
+
+function mostrarProductos() {
+    contenedor.innerHTML = "";
+    if(productos.length === 0){
+        contenedor.innerHTML = "<p style='text-align:center; color:#777;'>No hay productos disponibles en este momento.</p>";
+        return;
+    }
+    productos.forEach((producto) => {
+        const div = document.createElement('div');
+        div.classList.add('producto');
+        div.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}">
+            <h3>${producto.nombre}</h3>
+            <p>${producto.descripcion}</p>
+            <p><strong>USD ${producto.precio}</strong></p>
+            <a href="https://paypal.me/pago212397?locale.x=es_XC&country.x=EC" target="_blank" class="btn-comprar">💰 Comprar con PayPal</a>
+        `;
+        contenedor.appendChild(div);
+    });
+}
+
+mostrarProductos();
+</script>
+
+</body>
+</html>

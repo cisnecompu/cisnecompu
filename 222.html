@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISNE@COMPU - Administración de Programas</title>
+<style>
+body { font-family: Arial; margin:0; padding:0; background:#f4f4f9;}
+header { background:#0d6efd; color:white; padding:20px; text-align:center;}
+header h1 { margin:0; }
+.container { width:90%; max-width:1000px; margin:20px auto; }
+h2 { color:#0d6efd; text-align:center; margin-bottom:10px; }
+.productos { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:30px; }
+.producto { background:white; padding:15px; border-radius:10px; width:250px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.producto img { width:100%; height:200px; object-fit:cover; border-radius:10px;}
+.producto h3 { margin:10px 0 5px 0; }
+.producto p { font-size:14px; color:#555;}
+.producto button { background:#0d6efd; color:white; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; margin-top:5px; width:90%; }
+.producto button.delete { background:#dc3545; margin-top:5px; }
+.producto button.edit { background:#ffc107; color:black; margin-top:5px; }
+form { background:white; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:30px; max-width:500px; margin-left:auto; margin-right:auto;}
+form input, form textarea { width:100%; padding:10px; margin:5px 0 15px 0; border-radius:5px; border:1px solid #ccc;}
+form button { background:#0d6efd; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer;}
+#previsualizacion { display:block; width:200px; height:200px; object-fit:cover; margin:10px auto; border:1px solid #ccc; border-radius:10px; }
+footer { text-align:center; padding:15px; background:#343a40; color:white; margin-top:20px;}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>💻 CISNE@COMPU - Administración</h1>
+    <p><a href="index.html" style="color:white; text-decoration:underline;">Volver a la página principal</a></p>
+</header>
+
+<div class="container">
+    <h2>➕ Agregar / Editar Programa</h2>
+    <form id="formPrograma">
+        <input type="text" id="nombre" placeholder="Nombre del programa" required>
+        <textarea id="descripcion" placeholder="Descripción del programa" required></textarea>
+        <input type="number" id="precio" placeholder="Precio USD" required>
+        <input type="file" id="imagen" accept="image/*">
+        <img id="previsualizacion" src="" alt="Previsualización">
+        <button type="submit">Guardar Programa</button>
+        <button type="button" id="cancelEdit" style="display:none;background:#6c757d;">Cancelar edición</button>
+    </form>
+
+    <h2>🛒 Programas Agregados</h2>
+    <div class="productos" id="productos"></div>
+</div>
+
+<footer>
+    © 2025 CISNE@COMPU | Todos los derechos reservados
+</footer>
+
+<script>
+let productos = JSON.parse(localStorage.getItem('productos')) || [];
+let editIndex = null;
+
+const contenedor = document.getElementById('productos');
+const previsualizacion = document.getElementById('previsualizacion');
+const inputImagen = document.getElementById('imagen');
+const formPrograma = document.getElementById('formPrograma');
+const cancelEdit = document.getElementById('cancelEdit');
+
+// Mostrar productos
+function mostrarProductos() {
+    contenedor.innerHTML = "";
+    productos.forEach((producto, index) => {
+        const div = document.createElement('div');
+        div.classList.add('producto');
+
+        const img = document.createElement('img');
+        img.src = producto.imagen;
+        img.alt = producto.nombre;
+
+        const h3 = document.createElement('h3');
+        h3.textContent = producto.nombre;
+
+        const pDesc = document.createElement('p');
+        pDesc.textContent = producto.descripcion;
+
+        const pPrecio = document.createElement('p');
+        pPrecio.innerHTML = `<strong>USD ${producto.precio}</strong>`;
+
+        const btnEdit = document.createElement('button');
+        btnEdit.textContent = "✏️ Editar";
+        btnEdit.classList.add('edit');
+        btnEdit.addEventListener('click', () => editarProducto(index));
+
+        const btnDelete = document.createElement('button');
+        btnDelete.textContent = "🗑️ Eliminar";
+        btnDelete.classList.add('delete');
+        btnDelete.addEventListener('click', () => eliminarProducto(index));
+
+        div.appendChild(img);
+        div.appendChild(h3);
+        div.appendChild(pDesc);
+        div.appendChild(pPrecio);
+        div.appendChild(btnEdit);
+        div.appendChild(btnDelete);
+
+        contenedor.appendChild(div);
+    });
+}
+
+// Previsualización de imagen
+inputImagen.addEventListener('change', function(){
+    const file = this.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(){
+            previsualizacion.src = reader.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Guardar o editar programa
+formPrograma.addEventListener('submit', function(e){
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const descripcion = document.getElementById('descripcion').value;
+    const precio = parseFloat(document.getElementById('precio').value);
+
+    if(editIndex !== null){
+        if(inputImagen.files[0]){
+            const file = inputImagen.files[0];
+            const reader = new FileReader();
+            reader.onload = function(){
+                productos[editIndex] = {nombre, descripcion, precio, imagen: reader.result};
+                guardarYMostrar();
+            }
+            reader.readAsDataURL(file);
+        } else {
+            productos[editIndex].nombre = nombre;
+            productos[editIndex].descripcion = descripcion;
+            productos[editIndex].precio = precio;
+            guardarYMostrar();
+        }
+        editIndex = null;
+        cancelEdit.style.display = "none";
+    } else {
+        const file = inputImagen.files[0];
+        if(!file){ alert("Seleccione una imagen"); return; }
+        const reader = new FileReader();
+        reader.onload = function(){
+            productos.push({nombre, descripcion, precio, imagen: reader.result});
+            guardarYMostrar();
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Guardar en localStorage y actualizar vista
+function guardarYMostrar(){
+    localStorage.setItem('productos', JSON.stringify(productos));
+    mostrarProductos();
+    formPrograma.reset();
+    previsualizacion.src = "";
+}
+
+// Editar producto
+function editarProducto(index){
+    const producto = productos[index];
+    document.getElementById('nombre').value = producto.nombre;
+    document.getElementById('descripcion').value = producto.descripcion;
+    document.getElementById('precio').value = producto.precio;
+    previsualizacion.src = producto.imagen;
+    editIndex = index;
+    cancelEdit.style.display = "inline-block";
+}
+
+// Cancelar edición
+cancelEdit.addEventListener('click', function(){
+    formPrograma.reset();
+    previsualizacion.src = "";
+    editIndex = null;
+    cancelEdit.style.display = "none";
+});
+
+// Eliminar producto
+function eliminarProducto(index){
+    if(confirm("¿Desea eliminar este programa?")){
+        productos.splice(index,1);
+        guardarYMostrar();
+    }
+}
+
+// Inicializar vista
+mostrarProductos();
+</script>
+
+</body>
+</html>
